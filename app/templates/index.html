@@ -20,6 +20,7 @@
 </head>
 
 <body>
+    
     <header class="nav-bar">
         <div class="nav-content">
             <a href="/">
@@ -28,28 +29,12 @@
                 </div>
             </a>
         </div>
-        <div class="nav-items">
-            <div class="nav-item">
-                <a href="/hobbies">
-                    <div>
-                        Hobbies
-                    </div>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="/page2">
-                    <div>
-                        page2
-                    </div>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="/dogs">
-                    <div>
-                        Dogs
-                    </div>
-                </a>
-            </div>
+        <div class="nav-items">            
+            {% for item in navigation %}
+                <ul class="nav-item">
+                <a href="{{ item.href }}">{{ item.caption }}</a>
+                </ul>
+            {% endfor %}
         </div>
     </header>
 
