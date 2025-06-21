@@ -18,6 +18,9 @@ body {
     font-family: "Roboto", serif;
     font-weight: 700 !important;
     padding-top: 10px;
+    display: flex;
+    padding: 20px;
+    justify-content: space-between;
 }
 
 .nav-content .logo-touch-target {
@@ -29,6 +32,20 @@ body {
 .nav-content .nav-logo {
     height: 60px;
     margin: auto;
+}
+
+.nav-items {
+    display: flex;
+    flex-direction: row;
+    margin-right: 50px;
+    padding-top: 21px;
+    gap: 3rem;
+}
+
+.nav-item a{
+    color: white;
+    text-decoration: none;
+    font-size:25px;
 }
 
 .nav-logo {
