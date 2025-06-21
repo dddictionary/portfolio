@@ -39,7 +39,7 @@ body {
     flex-direction: row;
     margin-right: 50px;
     padding-top: 21px;
-    gap: 3rem;
+    gap: 1rem;
 }
 
 .nav-item a{
