@@ -20,6 +20,7 @@
 </head>
 
 <body>
+    
     <header class="nav-bar">
         <div class="nav-content">
             <a href="/">
@@ -27,6 +28,13 @@
                     <img src="./static/img/logo.svg" />
                 </div>
             </a>
+        </div>
+        <div class="nav-items">            
+            {% for item in navigation %}
+                <ul class="nav-item">
+                <a href="{{ item.href }}">{{ item.caption }}</a>
+                </ul>
+            {% endfor %}
         </div>
     </header>
 

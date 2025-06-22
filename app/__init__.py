@@ -5,6 +5,15 @@ from dotenv import load_dotenv # type: ignore
 load_dotenv()
 app = Flask(__name__)
 
+@app.context_processor
+def nav_items():
+    navitems = [
+        {'href': '/', 'caption': 'About'},
+        {'href': '/hobbies', 'caption': 'Hobbies'},
+        {'href': '/test', 'caption': 'Test'},
+        {'href': '/test', 'caption': 'Test'},
+    ]
+    return {'navigation': navitems}
 
 @app.route('/')
 def index():
