@@ -16,6 +16,18 @@ def nav_items():
     ]
     return {'navigation': navitems}
 
+@app.context_processor
+def hobby_items():
+    hobbyitems = [
+        {'title': 'Roblox', 'description': 'I love playing roblox it is so fun and I do this all day', 'source': 'https://i.pinimg.com/originals/37/07/a7/3707a7cd7d384511c213b2a12dc3f0a7.jpg'},
+        {'title': 'Mountain Climbing', 'description': 'There is nothing like climbing up a cliff-side on a hot sunny day with my VR', 'source': 'https://i.ytimg.com/vi/xAYuh4NQVeE/maxresdefault.jpg'},
+        {'title': 'Lorem', 'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.', 'source': 'https://dummyimage.com/500x500/ffffff/000000'},
+        {'title': 'Lorem', 'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.', 'source': 'https://dummyimage.com/500x500/ffffff/000000'},
+        {'title': 'Lorem', 'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.', 'source': 'https://dummyimage.com/500x500/ffffff/000000'},
+        {'title': 'Lorem', 'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.', 'source': 'https://dummyimage.com/500x500/ffffff/000000'},
+    ]
+    return {'hobbies': hobbyitems}
+
 @app.route('/')
 def index():
     return render_template('index.html', title="MLH Fellow", url=os.getenv("URL"))
