@@ -10,9 +10,9 @@ app = Flask(__name__)
 def nav_items():
     navitems = [
         {'href': '/', 'caption': 'About'},
-        {'href': '/hobbies', 'caption': 'Hobbies'},
-        {'href': '/aboutme', 'caption': 'About Me'},
+        # {'href': '/aboutme', 'caption': 'About Me'},
         {'href': '/work', 'caption': 'Work Experiences'},
+        {'href': '/hobbies', 'caption': 'Hobbies'},
     ]
     return {'navigation': navitems}
 
