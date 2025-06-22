@@ -12,7 +12,7 @@ def nav_items():
         {'href': '/', 'caption': 'About'},
         {'href': '/hobbies', 'caption': 'Hobbies'},
         {'href': '/aboutme', 'caption': 'About Me'},
-        {'href': '/test', 'caption': 'Test'},
+        {'href': '/work', 'caption': 'Work Experiences'},
     ]
     return {'navigation': navitems}
 
@@ -27,3 +27,8 @@ def hobbies():
 @app.route('/aboutme')
 def aboutme():
     return render_template('aboutme.html', title="MLH Fellow - About Me", url=os.getenv("URL"))
+
+@app.route('/work')
+def work():
+    return render_template('work.html', title="MLH Fellow - Work Experiences", url=os.getenv("URL"))
+
