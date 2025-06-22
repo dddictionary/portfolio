@@ -1,6 +1,7 @@
 import os
-from flask import Flask, render_template, request # type: ignore
-from dotenv import load_dotenv # type: ignore
+
+from dotenv import load_dotenv  # type: ignore
+from flask import Flask, render_template, request  # type: ignore
 
 load_dotenv()
 app = Flask(__name__)
@@ -10,7 +11,7 @@ def nav_items():
     navitems = [
         {'href': '/', 'caption': 'About'},
         {'href': '/hobbies', 'caption': 'Hobbies'},
-        {'href': '/test', 'caption': 'Test'},
+        {'href': '/aboutme', 'caption': 'About Me'},
         {'href': '/test', 'caption': 'Test'},
     ]
     return {'navigation': navitems}
@@ -22,3 +23,7 @@ def index():
 @app.route('/hobbies')
 def hobbies():
     return render_template('hobbies.html', title="MLH Fellow - Hobbies", url=os.getenv("URL"))
+
+@app.route('/aboutme')
+def aboutme():
+    return render_template('aboutme.html', title="MLH Fellow - About Me", url=os.getenv("URL"))
