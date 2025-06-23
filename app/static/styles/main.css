@@ -176,3 +176,41 @@ body {
     font-size: 50px;
     font-weight: 700;
 }
+
+.location-list {
+    margin: 40px auto;
+    width: 80%;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.location-list h3 {
+    font-size: 28px;
+    color: #1C539F;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.location-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+}
+
+.location-list li {
+    padding: 10px 15px;
+    background-color: #f0f4ff;
+    border-radius: 6px;
+    color: #1C539F;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.location-list li:hover {
+    background-color: #dbe8ff;
+}
