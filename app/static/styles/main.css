@@ -16,6 +16,28 @@ body {
     justify-content: center;
 }
 
+.work-experiences {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.work {
+    width: 65%;
+    background-color: #1C539F;
+    border-radius: 8px;
+    border-color: #1C539F;
+    border-width: 1px;
+    border-style: solid;
+    color: white;
+    padding: 20px;
+}
+
+.work h2{
+    color: #ffcd69;
+}
+
 .hobbies {
     display: flex;
     flex-wrap: wrap;

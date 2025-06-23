@@ -37,7 +37,18 @@
         </div>
     </header>
 
-    <h1>{{ title }}</h1>
-    <p>This is where my work experiences would go!</p>
+    <h1 class="page-description">{{ title }}</h1>
+    <p class="page-description">This is where my work experiences would go!</p>
+
+    <div class="work-experiences">
+    {% for item in work %}
+        <div class="work">
+            <h2>{{ item.title }}</h2>
+            <p>{{ item.role }}</p>
+            <p>{{ item.startdate }} - {{ item.enddate }}</p>
+            <p>{{ item.description }}</p>
+        </div>
+    {% endfor %}
+    </div>
 </body>
 </html>
