@@ -2,10 +2,9 @@
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta property="og:title" content="Personal Portfolio">
+    <meta property="og:title" content="title">
     <meta property="og:description" content="My Personal Portfolio">
     <meta property="og:url" content="{{ url }}">
 
@@ -37,16 +36,34 @@
         </div>
     </header>
 
-    <h1 class="page-description">{{ title }}</h1>
-    <p class="page-description">Here are some of my favorite hobbies!</p>
-    <div class="hobbies">
-    {% for item in hobbies %}
-        <div class="hobby">
-            <img src="{{item.source}}" a;t="{{item.title}}">
-            <h2>{{ item.title }}</h2>
-            <p>{{ item.description }}</p>
+    <div class="profile">
+        <div id="profile-picture" class="profile-picture">
+            <img src="./static/img/logo.jpg">
         </div>
-    {% endfor %}
+        <h1>{{ title }}</h1>
     </div>
+    <div class="travel-container">
+        <h1>Places I've Visited</h1>
+
+        <div id="map"
+            data-locations='{{ locations | tojson | safe }}'
+            style="height: 500px; width: 100%;">
+        </div>
+
+        <div class="location-list">
+            <h3>My Travels:</h3>
+            <ul>
+                {% for location in locations %}
+                <li>{{ location.name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script src="{{ url_for('static', filename='js/map.js') }}"></script>
 </body>
+
 </html>
