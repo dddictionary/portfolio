@@ -13,6 +13,7 @@ def nav_items():
         # {'href': '/aboutme', 'caption': 'About Me'},
         {'href': '/work', 'caption': 'Work Experiences'},
         {'href': '/hobbies', 'caption': 'Hobbies'},
+        {'href': '/education', 'caption': 'Education'},
     ]
     return {'navigation': navitems}
 
@@ -79,6 +80,24 @@ def work_experiences():
     ]
     return {'work': work_data}
 
+@app.context_processor
+def education_experiences():
+    education_data = [
+        {
+            'title': 'Generic High School',
+            'startdate': 'Sep 2018',
+            'enddate': 'June 2022',
+            'description': 'Acted in a musical, you might have heard of it.'
+        },        
+        {
+            'title': "Monster's University",
+            'startdate': 'Aug 2022',
+            'enddate': 'May 2026',
+            'description': "Learned to scare children and the effects of their fear on our world's ecosystem" 
+        }        
+    ]
+    return {'education': education_data}
+
 @app.route('/')
 def index():
     return render_template('index.html', title="MLH Fellow", url=os.getenv("URL"))
@@ -95,3 +114,6 @@ def aboutme():
 def work():
     return render_template('work.html', title="MLH Fellow - Work Experiences", url=os.getenv("URL"))
 
+@app.route('/education')
+def education():
+    return render_template('education.html', title="MLH Fellow - Education", url=os.getenv("URL"))
