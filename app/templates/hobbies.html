@@ -28,9 +28,25 @@
                 </div>
             </a>
         </div>
+        <div class="nav-items">            
+            {% for item in navigation %}
+                <ul class="nav-item">
+                <a href="{{ item.href }}">{{ item.caption }}</a>
+                </ul>
+            {% endfor %}
+        </div>
     </header>
 
-    <h1>{{ title }}</h1>
-    <p>i am a hobby page! so cool</p>
+    <h1 class="page-description">{{ title }}</h1>
+    <p class="page-description">Here are some of my favorite hobbies!</p>
+    <div class="hobbies">
+    {% for item in hobbies %}
+        <div class="hobby">
+            <img src="{{item.source}}" a;t="{{item.title}}">
+            <h2>{{ item.title }}</h2>
+            <p>{{ item.description }}</p>
+        </div>
+    {% endfor %}
+    </div>
 </body>
 </html>
