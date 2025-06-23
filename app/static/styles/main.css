@@ -16,14 +16,14 @@ body {
     justify-content: center;
 }
 
-.work-experiences {
+.work-experiences, .education-experiences {
     display: flex;
     flex-direction: column;
     gap: 20px;
     align-items: center;
 }
 
-.work {
+.work, .education {
     width: 65%;
     background-color: #1C539F;
     border-radius: 8px;
@@ -214,4 +214,3 @@ body {
 .location-list li:hover {
     background-color: #dbe8ff;
 }
-
