@@ -181,3 +181,14 @@ def get_time_line_post():
             TimelinePost.select().order_by(TimelinePost.created_at.desc())
         ]
     }
+@app.route('/api/delete_timeline_post/<int:post_id>', methods=['DELETE'])
+def delete_time_line_post(post_id):
+    try:
+        with mydb.connection_context():
+            post = TimelinePost.get_by_id(post_id)
+            post.delete_instance()
+        return 'deleted that post'
+    except TimelinePost.DoesNotExist:
+        return 'cant delete what doesnt exist'
+    except Exception as e:
+        return 'error idk what went wrong'
