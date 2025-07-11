@@ -41,12 +41,18 @@
     <p class="page-description">This is where my current and previous education would go!</p>
 
     <div class="education-experiences">
-    {% for item in education%}
-        <div class="education">
-            <h2>{{ item.title }}</h2>
-            <p>{{ item.startdate }} - {{ item.enddate }}</p>
-            <p>{{ item.description }}</p>
-        </div>
+    {% for post in timeline_posts %}
+            <div class="education">
+                <div class="post-header">
+                    <h2>{{ post.name }} ({{ post.email }})</h2>
+                    <p class="post-date">{{ post.created_at }}</p>
+                </div>
+                <p class="post-content">{{ post.content }}</p>
+            </div>
+     {% else %}
+            <div class="no-posts">
+                <p>No posts right now</p>
+            </div>
     {% endfor %}
     </div>
 </body>

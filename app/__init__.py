@@ -1,4 +1,5 @@
 import os
+import requests
 from peewee import *
 import datetime
 from dotenv import load_dotenv  # type: ignore
@@ -25,8 +26,23 @@ class TimelinePost(Model):
     class Meta:
         database = mydb
 
-#mydb.connect()
-#mydb.create_tables([TimelinePost])
+mydb.connect()
+mydb.create_tables([TimelinePost])
+
+@app.context_processor
+def timeline_posts_items():
+    TIMELINE_API_URL = "http://mlhportfolio-aaron.duckdns.org:5000/api/timeline_post"
+    try:
+        response = requests.get(TIMELINE_API_URL)
+        if response.status_code == 200:
+            posts_data = response.json().get('timeline_posts', [])
+            return {'timeline_posts': posts_data}
+        else:
+            print("something went wrong")
+            return {'timeline_posts': []}
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data, {e}")
+        return {'timeline_posts': []}
 
 @app.context_processor
 def nav_items():
