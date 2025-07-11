@@ -25,8 +25,8 @@ class TimelinePost(Model):
     class Meta:
         database = mydb
 
-mydb.connect()
-mydb.create_tables([TimelinePost])
+#mydb.connect()
+#mydb.create_tables([TimelinePost])
 
 @app.context_processor
 def nav_items():
@@ -163,6 +163,10 @@ def education():
 @app.route('/travels')
 def travels():
     return render_template('travel.html', title="MLH Fellow - Travels", url=os.getenv("URL"))
+
+@app.route('/timeline')
+def timeline():
+    return render_template('timeline.html', title="MLH Fellow - Timeline", url=os.getenv("URL"))
 
 @app.route('/api/timeline_post', methods=['POST'])
 def post_time_line_post():
