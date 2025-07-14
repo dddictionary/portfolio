@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Timeline</title>
+</head>
+
+<body>
+    <h1>Timeline</h1>
+
+    <h2>Create Post</h2>
+    <form id="postForm">
+        <input type="text" id="name" placeholder="Name" required><br><br>
+        <input type="email" id="email" placeholder="Email" required><br><br>
+        <textarea id="content" placeholder="Your post" required></textarea><br><br>
+        <button type="submit">Post</button>
+    </form>
+
+    <h2>Posts</h2>
+    <div id="posts">Loading...</div>
+
+    <script>
+        async function loadPosts() {
+            const response = await fetch('/api/timeline_post');
+            const data = await response.json();
+            const postsDiv = document.getElementById('posts');
+
+            if (data.timeline_posts.length === 0) {
+                postsDiv.innerHTML = 'No posts yet.';
+                return;
+            }
+
+            postsDiv.innerHTML = data.timeline_posts.map(post =>
+                `<div><strong>${post.name}</strong> (${post.email})<br>${post.content}<hr></div>`
+            ).join('');
+	}
+
+
+        document.getElementById('postForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData();
+            formData.append('name', document.getElementById('name').value);
+            formData.append('email', document.getElementById('email').value);
+            formData.append('content', document.getElementById('content').value);
+
+            await fetch('/api/timeline_post', {
+                method: 'POST',
+                body: formData
+            });
+
+            document.getElementById('postForm').reset();
+            loadPosts();
+        });
+
+        loadPosts();
+    </script>
+</body>
+
+</html>

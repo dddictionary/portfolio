@@ -43,6 +43,7 @@ def nav_items():
         {"href": "/hobbies", "caption": "Hobbies"},
         {"href": "/education", "caption": "Education"},
         {"href": "/travels", "caption": "Travels"},
+        {"href": "/timeline", "caption": "Timeline"},
     ]
     return {"navigation": navitems}
 
@@ -209,6 +210,11 @@ def get_timeline_post():
             for p in TimelinePost.select().order_by(TimelinePost.created_at.desc())
         ]
     }
+
+
+@app.route("/timeline")
+def timeline():
+    return render_template("timeline.html", title="Timeline")
 
 
 # TODO: Add a delete endpoint here and write logic for it here.
