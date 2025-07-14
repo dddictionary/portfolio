@@ -9,7 +9,7 @@ cd "${PROJECT_DIR}"
 
 # kill all tmux sessions
 echo "Killing all existing tmux sessions"
-tmux kill-server
+tmux kill-server || true
 
 
 # run git commands
@@ -26,4 +26,6 @@ pip install -r requirements.txt
 # start a new detached tmux sessions
 echo "Starting new tmux session"
 tmux new-session -d -s portfolio
+
+echo "Running Flask app inside tmux session"
 tmux send-keys -t portfolio "flask run --host=0.0.0.0" C-m
