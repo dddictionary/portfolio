@@ -55,32 +55,32 @@ def proxy(path):
     except requests.exceptions.RequestException as e:
         return "error loading astro", 502
 
-# @app.context_processor
-# def timeline_posts_items():
-#     TIMELINE_API_URL = "http://mlhportfolio-aaron.duckdns.org:5000/api/timeline_post"
-#     try:
-#         response = requests.get(TIMELINE_API_URL)
-#         if response.status_code == 200:
-#             posts_data = response.json().get('timeline_posts', [])
-#             return {'timeline_posts': posts_data}
-#         else:
-#             print("something went wrong")
-#             return {'timeline_posts': []}
-#     except requests.exceptions.RequestException as e:
-#         print(f"Error fetching data, {e}")
-#         return {'timeline_posts': []}
-# 
-# @app.context_processor
-# def nav_items():
-#     navitems = [
-#         {'href': '/', 'caption': 'About'},
-#         # {'href': '/aboutme', 'caption': 'About Me'},
-#         {'href': '/work', 'caption': 'Work Experiences'},
-#         {'href': '/hobbies', 'caption': 'Hobbies'},
-#         {'href': '/education', 'caption': 'Education'},
-#         {'href': '/travels', 'caption': 'Travels'},
-#     ]
-#     return {'navigation': navitems}
+@app.context_processor
+def timeline_posts_items():
+    TIMELINE_API_URL = "http://mlhportfolio-aaron.duckdns.org:5000/api/timeline_post"
+    try:
+        response = requests.get(TIMELINE_API_URL)
+        if response.status_code == 200:
+            posts_data = response.json().get('timeline_posts', [])
+            return {'timeline_posts': posts_data}
+        else:
+            print("something went wrong")
+            return {'timeline_posts': []}
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data, {e}")
+        return {'timeline_posts': []}
+
+@app.context_processor
+def nav_items():
+    navitems = [
+        {'href': '/experience', 'caption': 'Exp'},
+        # {'href': '/aboutme', 'caption': 'About Me'},
+        {'href': '/blog', 'caption': 'Blog'},
+        {'href': '/hobbies', 'caption': 'Hobbies'},
+        {'href': '/timeline', 'caption': 'Timeline'},
+        {'href': '/travels', 'caption': 'Travels'},
+    ]
+    return {'navigation': navitems}
 # 
 # @app.context_processor
 # def hobby_items():
@@ -163,24 +163,25 @@ def proxy(path):
 #     ]
 #     return {'education': education_data}
 # 
-# @app.context_processor
- def travel_experiences():
-     locations = [
-         {"name": "Paris, France", "lat": 48.8566, "lng": 2.3522},
-         {"name": "New York, USA", "lat": 40.7128, "lng": -74.0060},
-         {"name": "Tokyo, Japan", "lat": 35.6895, "lng": 139.6917},
-         {"name": "London, UK", "lat": 51.5074, "lng": -0.1278},
-         {"name": "Los Angeles, USA", "lat": 34.0522, "lng": -118.2437},
-         {"name": "São Paulo, Brazil", "lat": -23.5505, "lng": -46.6333},
-         {"name": "Cairo, Egypt", "lat": 30.0444, "lng": 31.2357},
-         {"name": "Dubai, UAE", "lat": 25.2048, "lng": 55.2708},
-         {"name": "Istanbul, Turkey", "lat": 41.0082, "lng": 28.9784},
-         {"name": "Bangkok, Thailand", "lat": 13.7563, "lng": 100.5018},
-         {"name": "Seoul, South Korea", "lat": 37.5665, "lng": 126.9780},
-         {"name": "Sydney, Australia", "lat": -33.8688, "lng": 151.2093},
-         {"name": "Mexico City, Mexico", "lat": 19.4326, "lng": -99.1332}
-     ]
-     return {'locations': locations}
+@app.context_processor
+def travel_experiences():
+    locations = [
+        {"name": "Paris, France", "lat": 48.8566, "lng": 2.3522},
+        {"name": "New York, USA", "lat": 40.7128, "lng": -74.0060},
+        {"name": "Tokyo, Japan", "lat": 35.6895, "lng": 139.6917},
+        {"name": "London, UK", "lat": 51.5074, "lng": -0.1278},
+        {"name": "Los Angeles, USA", "lat": 34.0522, "lng": -118.2437},
+        {"name": "São Paulo, Brazil", "lat": -23.5505, "lng": -46.6333},
+        {"name": "Cairo, Egypt", "lat": 30.0444, "lng": 31.2357},
+        {"name": "Dubai, UAE", "lat": 25.2048, "lng": 55.2708},
+        {"name": "Istanbul, Turkey", "lat": 41.0082, "lng": 28.9784},
+        {"name": "Bangkok, Thailand", "lat": 13.7563, "lng": 100.5018},
+        {"name": "Seoul, South Korea", "lat": 37.5665, "lng": 126.9780},
+        {"name": "Sydney, Australia", "lat": -33.8688, "lng": 151.2093},
+        {"name": "Mexico City, Mexico", "lat": 19.4326, "lng": -99.1332}
+    ]
+    return {'locations': locations}
+
 # 
 # @app.route('/')
 # def index():
@@ -201,19 +202,15 @@ def proxy(path):
 # @app.route('/education')
 # def education():
 #     return render_template('education.html', title="MLH Fellow - Education", url=os.getenv("URL"))
-# 
-@app.route('/travels')
-def travels():
-    return render_template('travel.html', title="MLH Fellow - Travels", url=os.getenv("URL"))
 
 @app.route('/timeline')
 def timeline():
     return render_template('timeline.html', title="MLH Fellow - Timeline", url=os.getenv("URL"))
 
-@app.route('/api/timeline_post', methods=['POST'])
-def post_time_line_post():
-    name = request.form['name']
-    email = request.form['email']
+@app.route('/travels')
+def travels():
+    return render_template('travel.html', title="MLH Fellow - Travels", url=os.getenv("URL"))
+
     content = request.form['content']
     timeline_post = TimelinePost.create(name=name, email=email, content=content)
     return model_to_dict(timeline_post)
