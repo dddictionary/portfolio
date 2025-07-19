@@ -64,4 +64,4 @@ class AppTestCase(unittest.TestCase):
         # print(html)
 
         # TODO: change this as needed. Currently, the timeline page get's post data from the hosted web app on the droplet. If you can change this, I think this test can be reworked better.
-        assert "testuser1@gmail.com" in html
+        assert post_data["content"] in html
