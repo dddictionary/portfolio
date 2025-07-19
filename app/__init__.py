@@ -75,22 +75,6 @@ def proxy(path):
 
 
 @app.context_processor
-def timeline_posts_items():
-    TIMELINE_API_URL = "http://mlhportfolio-aaron.duckdns.org:5000/api/timeline_post"
-    try:
-        response = requests.get(TIMELINE_API_URL)
-        if response.status_code == 200:
-            posts_data = response.json().get("timeline_posts", [])
-            return {"timeline_posts": posts_data}
-        else:
-            print("something went wrong")
-            return {"timeline_posts": []}
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching data, {e}")
-        return {"timeline_posts": []}
-
-
-@app.context_processor
 def nav_items():
     navitems = [
         {"href": "/experience", "caption": "Exp"},
@@ -253,6 +237,22 @@ def get_time_line_post():
             for p in TimelinePost.select().order_by(TimelinePost.created_at.desc())
         ]
     }
+
+
+@app.context_processor
+def timeline_posts_items():
+    # TIMELINE_API_URL = "/api/timeline_post"
+    try:
+        # response = requests.get(TIMELINE_API_URL)
+        data = get_time_line_post()
+        # if response.status_code == 200:
+        # posts_data = response.json().get("timeline_posts", [])
+        return {"timeline_posts": data.get("timeline_posts", [])}
+        # print("something went wrong")
+        # return {"timeline_posts": []}
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data, {e}")
+        return {"timeline_posts": []}
 
 
 @app.route("/api/timeline_post", methods=["POST"])
