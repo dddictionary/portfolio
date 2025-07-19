@@ -242,15 +242,9 @@ def get_time_line_post():
 
 @app.context_processor
 def timeline_posts_items():
-    # TIMELINE_API_URL = "/api/timeline_post"
     try:
-        # response = requests.get(TIMELINE_API_URL)
         data = get_time_line_post()
-        # if response.status_code == 200:
-        # posts_data = response.json().get("timeline_posts", [])
         return {"timeline_posts": data.get("timeline_posts", [])}
-        # print("something went wrong")
-        # return {"timeline_posts": []}
     except requests.exceptions.RequestException as e:
         print(f"Error fetching data, {e}")
         return {"timeline_posts": []}
