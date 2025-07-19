@@ -1,9 +1,10 @@
 import datetime
 import os
+import re
 
 import requests
 from dotenv import load_dotenv  # type: ignore
-from flask import Flask, Response, render_template, request  # type: ignore
+from flask import Flask, Response, jsonify, render_template, request  # type: ignore
 from peewee import *
 from playhouse.shortcuts import model_to_dict
 
@@ -257,11 +258,20 @@ def timeline_posts_items():
 
 @app.route("/api/timeline_post", methods=["POST"])
 def post_time_line_post():
-    name = request.form["name"]
-    email = request.form["email"]
-    content = request.form["content"]
+    name = request.form.get("name")
+    email = request.form.get("email")
+    content = request.form.get("content")
+    if not name:
+        return jsonify({"error": "Invalid name"}), 400
+
+    if not email or "@" not in email:
+        return jsonify({"error": "Invalid email"}), 400
+
+    if not content:
+        return jsonify({"error": "Invalid content"}), 400
+
     timeline_post = TimelinePost.create(name=name, email=email, content=content)
-    return model_to_dict(timeline_post)
+    return jsonify(model_to_dict(timeline_post))
 
 
 @app.route("/api/delete_timeline_post/<int:post_id>", methods=["DELETE"])

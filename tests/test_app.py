@@ -65,3 +65,34 @@ class AppTestCase(unittest.TestCase):
 
         # TODO: change this as needed. Currently, the timeline page get's post data from the hosted web app on the droplet. If you can change this, I think this test can be reworked better.
         assert post_data["content"] in html
+
+    def test_malformed_timeline_post(self):
+        response = self.client.post(
+            "/api/timeline_post",
+            data={"email": "john@example.com", "content": "Hello world, I'm John!"},
+        )
+        assert response.status_code == 400
+        assert response.is_json
+        json = response.get_json()
+        print(json)
+        assert "Invalid name" in json["error"]
+
+        response = self.client.post(
+            "/api/timeline_post",
+            data={"name": "John Doe", "email": "john@example.com", "content": ""},
+        )
+        assert response.status_code == 400
+        json = response.get_json()
+        assert "Invalid content" in json["error"]
+
+        response = self.client.post(
+            "/api/timeline_post",
+            data={
+                "name": "John Doe",
+                "email": "not-an-email",
+                "content": "Hello world, I'm John!",
+            },
+        )
+        assert response.status_code == 400
+        json = response.get_json()
+        assert "Invalid email" in json["error"]
