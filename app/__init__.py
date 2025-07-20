@@ -211,13 +211,13 @@ def travel_experiences():
 # def education():
 #     return render_template('education.html', title="MLH Fellow - Education", url=os.getenv("URL"))
 
+
 if os.getenv("TESTING") == "true":
     @app.route("/timeline")
     def timeline():
         return render_template(
             "timeline.html", title="MLH Fellow - Timeline", url=os.getenv("URL")
         )
-
 
 @app.route("/travels")
 def travels():
@@ -238,6 +238,7 @@ def get_time_line_post():
             for p in TimelinePost.select().order_by(TimelinePost.created_at.desc())
         ]
     }
+
 
 
 @app.context_processor
