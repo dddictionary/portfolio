@@ -1,21 +1,30 @@
-import os
-import requests
-from peewee import *
 import datetime
+import os
+import re
+
+import requests
 from dotenv import load_dotenv  # type: ignore
-from flask import Flask, render_template, request, Response  # type: ignore
+from flask import Flask, Response, jsonify, render_template, request  # type: ignore
+from peewee import *
 from playhouse.shortcuts import model_to_dict
 
 load_dotenv()
 app = Flask(__name__)
 
-mydb = MySQLDatabase(os.getenv("MYSQL_DATABASE"),
-    user=os.getenv("MYSQL_USER"),
-    password=os.getenv("MYSQL_PASSWORD"),
-    host=os.getenv("MYSQL_HOST"),
-    port=3306
-)
+if os.getenv("TESTING") == "true":
+    print("Running in test mode")
+    mydb = SqliteDatabase("file:memory?mode=memory&cache=shared", uri=True)
+else:
+    mydb = MySQLDatabase(
+        os.getenv("MYSQL_DATABASE"),
+        user=os.getenv("MYSQL_USER"),
+        password=os.getenv("MYSQL_PASSWORD"),
+        host=os.getenv("MYSQL_HOST"),
+        port=3306,
+    )
+
 print(mydb)
+
 
 class TimelinePost(Model):
     name = CharField()
@@ -26,62 +35,60 @@ class TimelinePost(Model):
     class Meta:
         database = mydb
 
+
 mydb.connect()
 mydb.create_tables([TimelinePost])
 
 
-ASTRO_URL = 'http://localhost:1234'
+ASTRO_URL = "http://localhost:1234"
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH'])
+
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
 def proxy(path):
-    astro_target_url = f'{ASTRO_URL}/{path}'
+    astro_target_url = f"{ASTRO_URL}/{path}"
     try:
         resp = requests.request(
             method=request.method,
             url=astro_target_url,
-            headers={key: value for (key, value) in request.headers if key.lower() != 'host'},
+            headers={
+                key: value for (key, value) in request.headers if key.lower() != "host"
+            },
             data=request.get_data(),
             params=request.args,
             allow_redirects=False,
-            stream=True 
+            stream=True,
         )
-        excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
+        excluded_headers = [
+            "content-encoding",
+            "content-length",
+            "transfer-encoding",
+            "connection",
+        ]
         headers = [
-            (key, value) for (key, value) in resp.raw.headers.items()
+            (key, value)
+            for (key, value) in resp.raw.headers.items()
             if key.lower() not in excluded_headers
         ]
         return Response(resp.content, resp.status_code, headers)
     except requests.exceptions.RequestException as e:
         return "error loading astro", 502
 
-@app.context_processor
-def timeline_posts_items():
-    TIMELINE_API_URL = "http://mlhportfolio-aaron.duckdns.org:5000/api/timeline_post"
-    try:
-        response = requests.get(TIMELINE_API_URL)
-        if response.status_code == 200:
-            posts_data = response.json().get('timeline_posts', [])
-            return {'timeline_posts': posts_data}
-        else:
-            print("something went wrong")
-            return {'timeline_posts': []}
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching data, {e}")
-        return {'timeline_posts': []}
 
 @app.context_processor
 def nav_items():
     navitems = [
-        {'href': '/experience', 'caption': 'Exp'},
+        {"href": "/experience", "caption": "Exp"},
         # {'href': '/aboutme', 'caption': 'About Me'},
-        {'href': '/blog', 'caption': 'Blog'},
-        {'href': '/hobbies', 'caption': 'Hobbies'},
-        {'href': '/timeline', 'caption': 'Timeline'},
-        {'href': '/travels', 'caption': 'Travels'},
+        {"href": "/blog", "caption": "Blog"},
+        {"href": "/hobbies", "caption": "Hobbies"},
+        {"href": "/timeline", "caption": "Timeline"},
+        {"href": "/travels", "caption": "Travels"},
     ]
-    return {'navigation': navitems}
-# 
+    return {"navigation": navitems}
+
+
+#
 # @app.context_processor
 # def hobby_items():
 #     hobbyitems = [
@@ -91,33 +98,33 @@ def nav_items():
 #             'source': 'https://i.pinimg.com/originals/37/07/a7/3707a7cd7d384511c213b2a12dc3f0a7.jpg'
 #         },
 #         {
-#             'title': 'Mountain Climbing', 
-#             'description': 'There is nothing like climbing up a cliff-side on a hot sunny day with my VR', 
+#             'title': 'Mountain Climbing',
+#             'description': 'There is nothing like climbing up a cliff-side on a hot sunny day with my VR',
 #             'source': 'https://i.ytimg.com/vi/xAYuh4NQVeE/maxresdefault.jpg'
 #         },
 #         {
-#             'title': 'Lorem', 
-#             'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.', 
+#             'title': 'Lorem',
+#             'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
 #             'source': 'https://dummyimage.com/500x500/ffffff/000000'
 #         },
 #         {
-#             'title': 'Lorem', 
-#             'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.', 
+#             'title': 'Lorem',
+#             'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
 #             'source': 'https://dummyimage.com/500x500/ffffff/000000'
 #         },
 #         {
-#             'title': 'Lorem', 
-#             'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.', 
+#             'title': 'Lorem',
+#             'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
 #             'source': 'https://dummyimage.com/500x500/ffffff/000000'
 #         },
 #         {
-#             'title': 'Lorem', 
-#             'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.', 
+#             'title': 'Lorem',
+#             'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
 #             'source': 'https://dummyimage.com/500x500/ffffff/000000'
 #         },
 #     ]
 #     return {'hobbies': hobbyitems}
-# 
+#
 # @app.context_processor
 # def work_experiences():
 #     work_data = [
@@ -144,7 +151,7 @@ def nav_items():
 #         }
 #     ]
 #     return {'work': work_data}
-# 
+#
 # @app.context_processor
 # def education_experiences():
 #     education_data = [
@@ -153,16 +160,16 @@ def nav_items():
 #             'startdate': 'Sep 2018',
 #             'enddate': 'June 2022',
 #             'description': 'Acted in a musical, you might have heard of it.'
-#         },        
+#         },
 #         {
 #             'title': "Monster's University",
 #             'startdate': 'Aug 2022',
 #             'enddate': 'May 2026',
-#             'description': "Learned to scare children and the effects of their fear on our world's ecosystem" 
-#         }        
+#             'description': "Learned to scare children and the effects of their fear on our world's ecosystem"
+#         }
 #     ]
 #     return {'education': education_data}
-# 
+#
 @app.context_processor
 def travel_experiences():
     locations = [
@@ -178,68 +185,98 @@ def travel_experiences():
         {"name": "Bangkok, Thailand", "lat": 13.7563, "lng": 100.5018},
         {"name": "Seoul, South Korea", "lat": 37.5665, "lng": 126.9780},
         {"name": "Sydney, Australia", "lat": -33.8688, "lng": 151.2093},
-        {"name": "Mexico City, Mexico", "lat": 19.4326, "lng": -99.1332}
+        {"name": "Mexico City, Mexico", "lat": 19.4326, "lng": -99.1332},
     ]
-    return {'locations': locations}
+    return {"locations": locations}
 
-# 
+
+#
 # @app.route('/')
 # def index():
 #     return render_template('index.html', title="Aaron Wu", url=os.getenv("URL"))
-# 
+#
 # @app.route('/hobbies')
 # def hobbies():
 #     return render_template('hobbies.html', title="MLH Fellow - Hobbies", url=os.getenv("URL"))
-# 
+#
 # @app.route('/aboutme')
 # def aboutme():
 #     return render_template('aboutme.html', title="MLH Fellow - About Me", url=os.getenv("URL"))
-# 
+#
 # @app.route('/work')
 # def work():
 #     return render_template('work.html', title="MLH Fellow - Work Experiences", url=os.getenv("URL"))
-# 
+#
 # @app.route('/education')
 # def education():
 #     return render_template('education.html', title="MLH Fellow - Education", url=os.getenv("URL"))
 
-#@app.route('/timeline')
-#def timeline():
-#    return render_template('timeline.html', title="MLH Fellow - Timeline", url=os.getenv("URL"))
 
-@app.route('/travels')
+if os.getenv("TESTING") == "true":
+    @app.route("/timeline")
+    def timeline():
+        return render_template(
+            "timeline.html", title="MLH Fellow - Timeline", url=os.getenv("URL")
+        )
+
+@app.route("/travels")
 def travels():
-    return render_template('travel.html', title="MLH Fellow - Travels", url=os.getenv("URL"))
+    return render_template(
+        "travel.html", title="MLH Fellow - Travels", url=os.getenv("URL")
+    )
 
-    content = request.form['content']
+    content = request.form["content"]
     timeline_post = TimelinePost.create(name=name, email=email, content=content)
     return model_to_dict(timeline_post)
 
-@app.route('/api/timeline_post', methods=['GET'])
+
+@app.route("/api/timeline_post", methods=["GET"])
 def get_time_line_post():
     return {
-        'timeline_posts': [
+        "timeline_posts": [
             model_to_dict(p)
-            for p in
-            TimelinePost.select().order_by(TimelinePost.created_at.desc())
+            for p in TimelinePost.select().order_by(TimelinePost.created_at.desc())
         ]
     }
-@app.route('/api/timeline_post', methods=['POST'])
-def post_time_line_post():
-    name = request.form['name']
-    email = request.form['email']
-    content = request.form['content']
-    timeline_post = TimelinePost.create(name=name, email=email, content=content)
-    return model_to_dict(timeline_post)
 
-@app.route('/api/delete_timeline_post/<int:post_id>', methods=['DELETE'])
+
+
+@app.context_processor
+def timeline_posts_items():
+    try:
+        data = get_time_line_post()
+        return {"timeline_posts": data.get("timeline_posts", [])}
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data, {e}")
+        return {"timeline_posts": []}
+
+
+@app.route("/api/timeline_post", methods=["POST"])
+def post_time_line_post():
+    name = request.form.get("name")
+    email = request.form.get("email")
+    content = request.form.get("content")
+    if not name:
+        return jsonify({"error": "Invalid name"}), 400
+
+    if not email or "@" not in email:
+        return jsonify({"error": "Invalid email"}), 400
+
+    if not content:
+        return jsonify({"error": "Invalid content"}), 400
+
+    timeline_post = TimelinePost.create(name=name, email=email, content=content)
+    return jsonify(model_to_dict(timeline_post))
+
+
+@app.route("/api/delete_timeline_post/<int:post_id>", methods=["DELETE"])
 def delete_time_line_post(post_id):
     try:
         with mydb.connection_context():
             post = TimelinePost.get_by_id(post_id)
             post.delete_instance()
-        return 'deleted that post'
+        return "deleted that post"
     except TimelinePost.DoesNotExist:
-        return 'cant delete what doesnt exist'
+        return "cant delete what doesnt exist"
     except Exception as e:
-        return 'error idk what went wrong'
+        return "error idk what went wrong"
