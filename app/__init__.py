@@ -40,7 +40,7 @@ mydb.connect()
 mydb.create_tables([TimelinePost])
 
 
-ASTRO_URL = "http://localhost:1234"
+ASTRO_URL = os.environ.get("ASTRO_URL","http://localhost:1234")
 
 
 @app.route("/", defaults={"path": ""})

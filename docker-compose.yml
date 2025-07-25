@@ -8,6 +8,7 @@ services:
       - .env
     environment:
       - FLASK_ENV=development
+      - ASTRO_URL=http://astro:1234
     ports:
       - "5000:5000"
     volumes:
@@ -22,6 +23,12 @@ services:
       - .env
     volumes:
       - mydatabase:/var/lib/mysql
+  astro:
+    container_name: astro
+    build: https://github.com/airwuu/blog.git
+    restart: always
+    ports:
+      - "1234:1234"
 
 volumes:
   mydatabase:
