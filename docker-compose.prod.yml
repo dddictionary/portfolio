@@ -1,0 +1,31 @@
+version: "3"
+services:
+  myportfolio:
+    container_name: myportfolio
+    build: .
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - ASTRO_URL=http://astro:1234
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql
+  mysql:
+    container_name: mysql
+    image: mariadb
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - mydatabase:/var/lib/mysql
+  astro:
+    container_name: astro
+    build: https://github.com/airwuu/blog.git
+    restart: always
+    ports:
+      - "1234:1234"
+
+volumes:
+  mydatabase:
