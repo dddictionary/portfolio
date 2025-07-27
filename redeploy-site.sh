@@ -10,16 +10,10 @@ cd "${PROJECT_DIR}"
 echo "Fetching latest changes from GitHub"
 git fetch && git reset origin/main --hard
 
-echo "Activating virtual environment"
-source .venv/bin/activate
+echo "Running docker compose down"
+docker compose -f docker-compose.prod.yml
 
-echo "Installing packages"
-pip install -r requirements.txt
-
-echo "Restarting service"
-sudo systemctl restart myportfolio
-
-echo "Checking service status"
-sudo systemctl status myportfolio --no-pager
+echo "Restarting with docker compose up"
+docker compose -f docker-compose.prod.yml up -d --build
 
 echo "Deployment successful!"

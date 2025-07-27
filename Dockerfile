@@ -1,7 +1,7 @@
 FROM python:3.9-slim-buster
 
 # TODO: Change this workdir!!
-WORKDIR .
+WORKDIR /root/portfolio
 
 COPY requirements.txt .
 
