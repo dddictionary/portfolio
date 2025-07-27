@@ -8,8 +8,8 @@ services:
       - .env
     # environment:
     #   - FLASK_ENV=development
-    ports:
-      - "5000:5000"
+    # ports:
+    #   - "5000:5000"
     # volumes:
     #   - .:/myportfolio
     depends_on:
