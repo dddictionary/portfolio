@@ -173,19 +173,25 @@ def nav_items():
 @app.context_processor
 def travel_experiences():
     locations = [
-        {"name": "Paris, France", "lat": 48.8566, "lng": 2.3522},
-        {"name": "New York, USA", "lat": 40.7128, "lng": -74.0060},
-        {"name": "Tokyo, Japan", "lat": 35.6895, "lng": 139.6917},
-        {"name": "London, UK", "lat": 51.5074, "lng": -0.1278},
+        # {"name": "Paris, France", "lat": 48.8566, "lng": 2.3522},
+        # {"name": "New York, USA", "lat": 40.7128, "lng": -74.0060},
+        # {"name": "Tokyo, Japan", "lat": 35.6895, "lng": 139.6917},
+        # {"name": "London, UK", "lat": 51.5074, "lng": -0.1278},
         {"name": "Los Angeles, USA", "lat": 34.0522, "lng": -118.2437},
-        {"name": "São Paulo, Brazil", "lat": -23.5505, "lng": -46.6333},
-        {"name": "Cairo, Egypt", "lat": 30.0444, "lng": 31.2357},
-        {"name": "Dubai, UAE", "lat": 25.2048, "lng": 55.2708},
-        {"name": "Istanbul, Turkey", "lat": 41.0082, "lng": 28.9784},
-        {"name": "Bangkok, Thailand", "lat": 13.7563, "lng": 100.5018},
-        {"name": "Seoul, South Korea", "lat": 37.5665, "lng": 126.9780},
-        {"name": "Sydney, Australia", "lat": -33.8688, "lng": 151.2093},
-        {"name": "Mexico City, Mexico", "lat": 19.4326, "lng": -99.1332},
+        {"name": "Mountain View, USA", "lat": 37.3861, "lng": -122.0839},
+        {"name": "San Diego, USA", "lat": 32.7157, "lng": -117.1611},
+        {"name": "Merced, USA", "lat": 37.3022, "lng": -120.4830},
+        {"name": "Tijuana, Mexico", "lat": 32.5149, "lng": -117.0382},
+        {"name": "Boston, USA", "lat": 42.3601, "lng": -71.0589},
+        {"name": "Guangdong, China", "lat": 23.1291, "lng": 113.2644},
+        # {"name": "São Paulo, Brazil", "lat": -23.5505, "lng": -46.6333},
+        # {"name": "Cairo, Egypt", "lat": 30.0444, "lng": 31.2357},
+        # {"name": "Dubai, UAE", "lat": 25.2048, "lng": 55.2708},
+        # {"name": "Istanbul, Turkey", "lat": 41.0082, "lng": 28.9784},
+        # {"name": "Bangkok, Thailand", "lat": 13.7563, "lng": 100.5018},
+        # {"name": "Seoul, South Korea", "lat": 37.5665, "lng": 126.9780},
+        # {"name": "Sydney, Australia", "lat": -33.8688, "lng": 151.2093},
+        # {"name": "Mexico City, Mexico", "lat": 19.4326, "lng": -99.1332},
     ]
     return {"locations": locations}
 
