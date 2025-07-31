@@ -9,10 +9,10 @@ from playhouse.shortcuts import model_to_dict
 load_dotenv()
 app = Flask(__name__)
 
-if os.getenv("TESTING")=="true":
+if os.getenv("TESTING") == "true":
     print("Running in test mode")
-    mydb = SqliteDatabase('file:memory?mode=memory&cache=shared', uri=True)
-else:    
+    mydb = SqliteDatabase("file:memory?mode=memory&cache=shared", uri=True)
+else:
     mydb = MySQLDatabase(
         os.getenv("MYSQL_DATABASE"),
         user=os.getenv("MYSQL_USER"),
@@ -42,7 +42,7 @@ mydb.create_tables([TimelinePost])
 def nav_items():
     navitems = [
         {"href": "/", "caption": "About"},
-        # {'href': '/aboutme', 'caption': 'About Me'},
+        {"href": "/aboutme", "caption": "About Me"},
         {"href": "/work", "caption": "Work Experiences"},
         {"href": "/hobbies", "caption": "Hobbies"},
         {"href": "/education", "caption": "Education"},
@@ -201,7 +201,12 @@ def post_timeline_post():
     name = request.form.get("name")
     email = request.form.get("email")
     content = request.form.get("content")
-    if (not email) or (not isinstance(email, str)) or (len(email) <= 0) or ("@" not in email):
+    if (
+        (not email)
+        or (not isinstance(email, str))
+        or (len(email) <= 0)
+        or ("@" not in email)
+    ):
         return "Invalid email", 400
     if (not name) or (not isinstance(name, str)) or (len(name) <= 0):
         return "Invalid name", 400
