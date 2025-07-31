@@ -77,3 +77,5 @@ You'll now be able to access the website at `localhost:5000` or `127.0.0.1:5000`
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate!
+
+This change is being made to test the redeploy script.
