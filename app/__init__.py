@@ -41,7 +41,7 @@ mydb.create_tables([TimelinePost])
 @app.context_processor
 def nav_items():
     navitems = [
-        {"href": "/", "caption": "About"},
+        # {"href": "/", "caption": "About"},
         {"href": "/aboutme", "caption": "About Me"},
         {"href": "/work", "caption": "Work Experiences"},
         {"href": "/hobbies", "caption": "Hobbies"},
