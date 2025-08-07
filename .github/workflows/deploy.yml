@@ -10,7 +10,7 @@ on:
 jobs:
   deploy:
     name: "Deploy to VPS"
-    runs-on: ubtuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Configure SSH
         run: |
