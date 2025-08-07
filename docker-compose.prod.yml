@@ -7,8 +7,7 @@ services:
     env_file:
       - .env
     depends_on:
-      mysql:
-        condition: service_healthy
+      mysql
 
   mysql:
     container_name: mysql
@@ -18,11 +17,6 @@ services:
       - .env
     volumes:
       - mydatabase:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   nginx:
     container_name: nginx
