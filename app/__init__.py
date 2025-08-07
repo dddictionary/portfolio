@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 
 from dotenv import load_dotenv  # type: ignore
-from flask import Flask, render_template, request  # type: ignore
+from flask import Flask, render_template, request, jsonify  # type: ignore
 from peewee import *
 from playhouse.shortcuts import model_to_dict
 
@@ -231,6 +231,10 @@ def get_timeline_post():
 @app.route("/timeline")
 def timeline():
     return render_template("timeline.html", title="Timeline")
+
+@app.route("/api/test-ci", methods=["GET"])
+def test_ci():
+    return jsonify("ci should be working and this endpoint should be reachable")
 
 
 # TODO: Add a delete endpoint here and write logic for it here.
