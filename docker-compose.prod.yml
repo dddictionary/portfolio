@@ -6,14 +6,9 @@ services:
     restart: always
     env_file:
       - .env
-    # environment:
-    #   - FLASK_ENV=development
-    # ports:
-    #   - "5000:5000"
-    # volumes:
-    #   - .:/myportfolio
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
 
   mysql:
     container_name: mysql
@@ -23,6 +18,11 @@ services:
       - .env
     volumes:
       - mydatabase:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   nginx:
     container_name: nginx
