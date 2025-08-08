@@ -228,7 +228,7 @@ if os.getenv("TESTING") == "true":
 @app.route("/travels")
 def travels():
     return render_template(
-        "travel.html", title="MLH Fellow - Travels", url=os.getenv("URL")
+        "travel.html", title="Aaron Wu - Travels", url=os.getenv("URL")
     )
 
     content = request.form["content"]
