@@ -31,7 +31,7 @@ jobs:
       
       - name: Create .env file on server
         run: |
-          ssh droplet "mkdir -p /root/portfolio && printf 'MYSQL_DATABASE=%s\nMYSQL_USER=%s\nMYSQL_PASSWORD=%s\nMYSQL_HOST=%s\nURL=%s\nCERTBOT_EMAIL=%s\n' '$MYSQL_DATABASE' '$MYSQL_USER' '$MYSQL_PASSWORD' '$MYSQL_HOST' '$URL' '$CERTBOT_EMAIL' > /root/portfolio/.env"
+          ssh droplet "mkdir -p /root/portfolio && printf 'MYSQL_DATABASE=%s\nMYSQL_USER=%s\nMYSQL_PASSWORD=%s\nMYSQL_HOST=%s\nURL=%s\nCERTBOT_EMAIL=%s\nMARIADB_ROOT_PASSWORD=%s\n' '$MYSQL_DATABASE' '$MYSQL_USER' '$MYSQL_PASSWORD' '$MYSQL_HOST' '$URL' '$CERTBOT_EMAIL' '$MARIADB_ROOT_PASSWORD' > /root/portfolio/.env"
         env:
           MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
           MYSQL_USER: ${{ secrets.MYSQL_USER }}
@@ -39,6 +39,7 @@ jobs:
           MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
           URL: ${{ secrets.URL }}
           CERTBOT_EMAIL: ${{ secrets.CERTBOT_EMAIL }}
+          MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
 
       - name: Deploy site
         run: |
