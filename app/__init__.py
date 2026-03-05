@@ -37,6 +37,23 @@ class TimelinePost(Model):
 mydb.connect()
 mydb.create_tables([TimelinePost])
 
+# In test mode, keep the connection open — SQLite in-memory DB loses all
+# data (including tables) when the last connection closes.
+# In production, close the startup connection and manage connections
+# per-request so MariaDB receives a clean COM_QUIT after each request,
+# preventing "Aborted connection" warnings in the logs.
+if os.getenv("TESTING") != "true":
+    mydb.close()
+
+    @app.before_request
+    def before_request():
+        mydb.connect(reuse_if_open=True)
+
+    @app.teardown_request
+    def teardown_request(exc):
+        if not mydb.is_closed():
+            mydb.close()
+
 
 @app.context_processor
 def nav_items():
