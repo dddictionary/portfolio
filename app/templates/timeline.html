@@ -1,60 +1,69 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>Timeline</title>
-</head>
+{% block content %}
+<section class="section">
+    <p class="section__label reveal">Feed</p>
+    <h1 class="section__title reveal">{{ title }}</h1>
+    <p class="section__subtitle reveal">Leave a message, share a thought.</p>
 
-<body>
-    <h1>Timeline</h1>
+    <div class="timeline-form reveal">
+        <h3 class="timeline-form__title">New Post</h3>
+        <form id="postForm">
+            <div class="form-row">
+                <input type="text" id="name" class="form-input" placeholder="Name" required>
+                <input type="email" id="email" class="form-input" placeholder="Email" required>
+            </div>
+            <textarea id="content" class="form-textarea" placeholder="What's on your mind?" required></textarea>
+            <button type="submit" class="form-btn">Post</button>
+        </form>
+    </div>
 
-    <h2>Create Post</h2>
-    <form id="postForm">
-        <input type="text" id="name" placeholder="Name" required><br><br>
-        <input type="email" id="email" placeholder="Email" required><br><br>
-        <textarea id="content" placeholder="Your post" required></textarea><br><br>
-        <button type="submit">Post</button>
-    </form>
+    <div id="posts" class="posts">
+        <p class="post__empty">Loading...</p>
+    </div>
+</section>
+{% endblock %}
 
-    <h2>Posts</h2>
-    <div id="posts">Loading...</div>
+{% block scripts %}
+<script>
+    async function loadPosts() {
+        const response = await fetch('/api/timeline_post');
+        const data = await response.json();
+        const postsDiv = document.getElementById('posts');
 
-    <script>
-        async function loadPosts() {
-            const response = await fetch('/api/timeline_post');
-            const data = await response.json();
-            const postsDiv = document.getElementById('posts');
+        if (data.timeline_posts.length === 0) {
+            postsDiv.innerHTML = '<p class="post__empty">No posts yet. Be the first.</p>';
+            return;
+        }
 
-            if (data.timeline_posts.length === 0) {
-                postsDiv.innerHTML = 'No posts yet.';
-                return;
-            }
+        postsDiv.innerHTML = data.timeline_posts.map(post =>
+            `<div class="post">
+                <div class="post__header">
+                    <span class="post__name">${post.name}</span>
+                    <span class="post__email">${post.email}</span>
+                </div>
+                <p class="post__content">${post.content}</p>
+            </div>`
+        ).join('');
+    }
 
-            postsDiv.innerHTML = data.timeline_posts.map(post =>
-                `<div><strong>${post.name}</strong> (${post.email})<br>${post.content}<hr></div>`
-            ).join('');
-	}
+    document.getElementById('postForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
 
+        const formData = new FormData();
+        formData.append('name', document.getElementById('name').value);
+        formData.append('email', document.getElementById('email').value);
+        formData.append('content', document.getElementById('content').value);
 
-        document.getElementById('postForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const formData = new FormData();
-            formData.append('name', document.getElementById('name').value);
-            formData.append('email', document.getElementById('email').value);
-            formData.append('content', document.getElementById('content').value);
-
-            await fetch('/api/timeline_post', {
-                method: 'POST',
-                body: formData
-            });
-
-            document.getElementById('postForm').reset();
-            loadPosts();
+        await fetch('/api/timeline_post', {
+            method: 'POST',
+            body: formData
         });
 
+        document.getElementById('postForm').reset();
         loadPosts();
-    </script>
-</body>
+    });
 
-</html>
+    loadPosts();
+</script>
+{% endblock %}
