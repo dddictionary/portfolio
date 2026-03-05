@@ -1,48 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta property="og:title" content="Personal Portfolio">
-    <meta property="og:description" content="My Personal Portfolio">
-    <meta property="og:url" content="{{ url }}">
-
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
-
-    <link lang='sass' rel="stylesheet" href="./static/styles/main.css">
-    <link rel='icon' href='./static/img/favicon.ico' type='image/x-icon' />
-    <title>{{ title }}</title>
-</head>
-
-<body>
-    
-    <header class="nav-bar">
-        <div class="nav-content">
-            <a href="/">
-                <div class="nav-logo">
-                    <img src="./static/img/logo.svg" />
-                </div>
-            </a>
-        </div>
-        <div class="nav-items">            
-            {% for item in navigation %}
-                <ul class="nav-item">
-                <a href="{{ item.href }}">{{ item.caption }}</a>
-                </ul>
-            {% endfor %}
-        </div>
-    </header>
-
-    <div class="profile">
-        <div id="profile-picture" class="profile-picture">
-            <img src="./static/img/logo.jpg">
-        </div>
-        <h1>{{ title }}</h1>
+{% block content %}
+<section class="hero">
+    <p class="hero__greeting reveal">Hello, I'm</p>
+    <h1 class="hero__name reveal">Abrar Habib<span>Developer & Creator</span></h1>
+    <p class="hero__bio reveal">Building things for the web. Currently exploring the intersection of software engineering, infrastructure, and design.</p>
+    <div class="hero__links reveal">
+        <a href="/aboutme" class="hero__link">About Me</a>
+        <a href="/work" class="hero__link">Experience</a>
+        <a href="/timeline" class="hero__link">Timeline</a>
     </div>
-</body>
-</html>
+</section>
+{% endblock %}

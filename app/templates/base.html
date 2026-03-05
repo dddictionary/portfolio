@@ -1,52 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta property="og:title" content="Personal Portfolio">
-    <meta property="og:description" content="My Personal Portfolio">
-    <meta property="og:url" content="{{ url }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="{{ title }}">
+    <meta property="og:description" content="Abrar Habib — Portfolio">
 
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
 
-    <link lang='sass' rel="stylesheet" href="./static/styles/main.css">
-    <link rel='icon' href='./static/img/favicon.ico' type='image/x-icon' />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
     <title>{{ title }}</title>
+
+    {% block head %}{% endblock %}
 </head>
-
 <body>
-
-    <header class="nav-bar">
-        <div class="nav-content">
-	    <a class="navbar-brand" href="/">Abrar Habib</a>
-                <div class="nav-logo">
-                    <img src="./static/img/logo.svg" />
-                </div>
-            </a>
-        </div>
-        <div class="nav-items">
+    <nav class="nav" id="nav">
+        <a href="/" class="nav__logo">AH</a>
+        <button class="nav__toggle" id="navToggle" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+        </button>
+        <div class="nav__links" id="navLinks">
             {% for item in navigation %}
-                <ul class="nav-item">
-                <a href="{{ item.href }}">{{ item.caption }}</a>
-                </ul>
+            <a href="{{ item.href }}" class="nav__link {% if request.path == item.href %}nav__link--active{% endif %}">{{ item.caption }}</a>
             {% endfor %}
         </div>
-    </header>
+    </nav>
 
-    <div class="container mt-4">
-	{% block content %}{% endblock %}
-    </div>
+    <main class="main">
+        {% block content %}{% endblock %}
+    </main>
 
-    <div class="profile">
-        <div id="profile-picture" class="profile-picture">
-            <img src="./static/img/logo.jpg">
-        </div>
-        <h1>{{ title }}</h1>
-    </div>
-<body>
+    <footer class="footer">
+        <span class="footer__line"></span>
+        <p class="footer__text">&copy; 2026 Abrar Habib</p>
+    </footer>
+
+    <script>
+        // Mobile nav toggle
+        const toggle = document.getElementById('navToggle');
+        const links = document.getElementById('navLinks');
+        toggle.addEventListener('click', () => {
+            links.classList.toggle('nav__links--open');
+            toggle.classList.toggle('nav__toggle--open');
+        });
+
+        // Scroll reveal
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        reveals.forEach(el => observer.observe(el));
+
+        // Nav background on scroll
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('nav--scrolled', window.scrollY > 40);
+        });
+    </script>
+
+    {% block scripts %}{% endblock %}
+</body>
 </html>

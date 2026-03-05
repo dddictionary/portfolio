@@ -1,52 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta property="og:title" content="Personal Portfolio">
-    <meta property="og:description" content="My Personal Portfolio">
-    <meta property="og:url" content="{{ url }}">
+{% block content %}
+<section class="section">
+    <p class="section__label reveal">Interests</p>
+    <h1 class="section__title reveal">{{ title }}</h1>
+    <p class="section__subtitle reveal">Things I enjoy outside of code.</p>
 
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
-
-    <link lang='sass' rel="stylesheet" href="./static/styles/main.css">
-    <link rel='icon' href='./static/img/favicon.ico' type='image/x-icon' />
-    <title>{{ title }}</title>
-</head>
-
-<body>
-    <header class="nav-bar">
-        <div class="nav-content">
-            <a href="/">
-                <div class="nav-logo">
-                    <img src="./static/img/logo.svg" />
-                </div>
-            </a>
+    <div class="hobby-grid stagger">
+        {% for item in hobbies %}
+        <div class="hobby-card reveal">
+            <img src="{{ item.source }}" alt="{{ item.title }}" class="hobby-card__img">
+            <div class="hobby-card__body">
+                <h3 class="hobby-card__title">{{ item.title }}</h3>
+                <p class="hobby-card__desc">{{ item.description }}</p>
+            </div>
         </div>
-        <div class="nav-items">
-            {% for item in navigation %}
-                <ul class="nav-item">
-                <a href="{{ item.href }}">{{ item.caption }}</a>
-                </ul>
-            {% endfor %}
-        </div>
-    </header>
-
-    <h1 class="page-description">{{ title }}</h1>
-    <p class="page-description">Here are some of my favorite hobbies!</p>
-    <div class="hobbies">
-    {% for item in hobbies %}
-        <div class="hobby">
-            <img src="{{item.source}}" a;t="{{item.title}}">
-            <h2>{{ item.title }}</h2>
-            <p>{{ item.description }}</p>
-        </div>
-    {% endfor %}
+        {% endfor %}
     </div>
-</body>
-</html>
+</section>
+{% endblock %}
