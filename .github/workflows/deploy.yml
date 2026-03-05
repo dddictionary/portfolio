@@ -29,27 +29,9 @@ jobs:
           SSH_IP: ${{ secrets.SSH_IP }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       
-      - name: Deploy site
+      - name: Create .env file on server
         run: |
-          ssh droplet bash -s << 'SCRIPT'
-            set -e
-            if [ ! -d /root/portfolio ]; then
-              git clone https://github.com/dddictionary/portfolio.git /root/portfolio
-            fi
-            cd /root/portfolio
-            git fetch
-            git reset origin/main --hard
-            cat > .env <<EOF
-          MYSQL_DATABASE=$MYSQL_DATABASE
-          MYSQL_USER=$MYSQL_USER
-          MYSQL_PASSWORD=$MYSQL_PASSWORD
-          MYSQL_HOST=$MYSQL_HOST
-          URL=$URL
-          CERTBOT_EMAIL=$CERTBOT_EMAIL
-          EOF
-            docker compose -f docker-compose.prod.yml down
-            docker compose -f docker-compose.prod.yml up -d --build
-          SCRIPT
+          ssh droplet "mkdir -p /root/portfolio && printf 'MYSQL_DATABASE=%s\nMYSQL_USER=%s\nMYSQL_PASSWORD=%s\nMYSQL_HOST=%s\nURL=%s\nCERTBOT_EMAIL=%s\n' '$MYSQL_DATABASE' '$MYSQL_USER' '$MYSQL_PASSWORD' '$MYSQL_HOST' '$URL' '$CERTBOT_EMAIL' > /root/portfolio/.env"
         env:
           MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
           MYSQL_USER: ${{ secrets.MYSQL_USER }}
@@ -57,3 +39,7 @@ jobs:
           MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
           URL: ${{ secrets.URL }}
           CERTBOT_EMAIL: ${{ secrets.CERTBOT_EMAIL }}
+
+      - name: Deploy site
+        run: |
+          ssh droplet 'set -e && if [ ! -d /root/portfolio/.git ]; then git clone https://github.com/dddictionary/portfolio.git /root/portfolio; fi && cd /root/portfolio && git fetch && git reset origin/main --hard && docker compose -f docker-compose.prod.yml down && docker compose -f docker-compose.prod.yml up -d --build'
