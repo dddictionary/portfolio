@@ -29,5 +29,5 @@ jobs:
           SSH_IP: ${{ secrets.SSH_IP }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       
-      - name: Deploy site 
-        run: ssh droplet '~/redeploy-site.sh'
+      - name: Deploy site
+        run: ssh droplet 'cd /root/portfolio && git fetch && git reset origin/main --hard && docker compose -f docker-compose.prod.yml down && docker compose -f docker-compose.prod.yml up -d --build'
