@@ -178,41 +178,41 @@ def travel_experiences():
 
 @app.route("/")
 def index():
-    return render_template("index.html", title="MLH Fellow", url=os.getenv("URL"))
+    return render_template("index.html", title="Abrar Habib", url=os.getenv("URL"))
 
 
 @app.route("/hobbies")
 def hobbies():
     return render_template(
-        "hobbies.html", title="MLH Fellow - Hobbies", url=os.getenv("URL")
+        "hobbies.html", title="Abrar Habib —Hobbies", url=os.getenv("URL")
     )
 
 
 @app.route("/aboutme")
 def aboutme():
     return render_template(
-        "aboutme.html", title="MLH Fellow - About Me", url=os.getenv("URL")
+        "aboutme.html", title="Abrar Habib —About Me", url=os.getenv("URL")
     )
 
 
 @app.route("/work")
 def work():
     return render_template(
-        "work.html", title="MLH Fellow - Work Experiences", url=os.getenv("URL")
+        "work.html", title="Abrar Habib —Work Experiences", url=os.getenv("URL")
     )
 
 
 @app.route("/education")
 def education():
     return render_template(
-        "education.html", title="MLH Fellow - Education", url=os.getenv("URL")
+        "education.html", title="Abrar Habib —Education", url=os.getenv("URL")
     )
 
 
 @app.route("/travels")
 def travels():
     return render_template(
-        "travel.html", title="MLH Fellow - Travels", url=os.getenv("URL")
+        "travel.html", title="Abrar Habib —Travels", url=os.getenv("URL")
     )
 
 
