@@ -31,7 +31,7 @@ jobs:
       
       - name: Create .env file on server
         run: |
-          ssh droplet "mkdir -p /root/portfolio && printf 'MYSQL_DATABASE=%s\nMYSQL_USER=%s\nMYSQL_PASSWORD=%s\nMYSQL_HOST=%s\nURL=%s\nCERTBOT_EMAIL=%s\nMARIADB_ROOT_PASSWORD=%s\n' '$MYSQL_DATABASE' '$MYSQL_USER' '$MYSQL_PASSWORD' '$MYSQL_HOST' '$URL' '$CERTBOT_EMAIL' '$MARIADB_ROOT_PASSWORD' > /root/portfolio/.env"
+          ssh droplet "mkdir -p /root/portfolio && printf 'MYSQL_DATABASE=%s\nMYSQL_USER=%s\nMYSQL_PASSWORD=%s\nMYSQL_HOST=%s\nURL=%s\nCERTBOT_EMAIL=%s\nMARIADB_ROOT_PASSWORD=%s\nGRAFANA_PASSWORD=%s\n' '$MYSQL_DATABASE' '$MYSQL_USER' '$MYSQL_PASSWORD' '$MYSQL_HOST' '$URL' '$CERTBOT_EMAIL' '$MARIADB_ROOT_PASSWORD' '$GRAFANA_PASSWORD' > /root/portfolio/.env"
         env:
           MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
           MYSQL_USER: ${{ secrets.MYSQL_USER }}
@@ -40,7 +40,8 @@ jobs:
           URL: ${{ secrets.URL }}
           CERTBOT_EMAIL: ${{ secrets.CERTBOT_EMAIL }}
           MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
+          GRAFANA_PASSWORD: ${{ secrets.GRAFANA_PASSWORD }}
 
       - name: Deploy site
         run: |
-          ssh droplet 'set -e && if [ ! -d /root/portfolio/.git ]; then git clone https://github.com/dddictionary/portfolio.git /root/portfolio; fi && cd /root/portfolio && git fetch && git reset origin/main --hard && docker compose -f docker-compose.prod.yml down && docker compose -f docker-compose.prod.yml up -d --build'
+          ssh droplet 'set -e && if [ ! -d /root/portfolio/.git ]; then git clone https://github.com/dddictionary/portfolio.git /root/portfolio; fi && cd /root/portfolio && git fetch && git reset origin/main --hard && docker compose -f docker-compose.prod.yml -f docker-compose.monitoring.yml down && docker compose -f docker-compose.prod.yml up -d --build && docker compose -f docker-compose.monitoring.yml up -d --build'

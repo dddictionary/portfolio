@@ -6,8 +6,11 @@ from flask import Flask, render_template, request, jsonify  # type: ignore
 from peewee import *
 from playhouse.shortcuts import model_to_dict
 
+from prometheus_flask_exporter import PrometheusMetrics  # type: ignore
+
 load_dotenv()
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)
 
 if os.getenv("TESTING") == "true":
     print("Running in test mode")
