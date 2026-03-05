@@ -30,3 +30,13 @@ jobs:
 
       - name: Run Tests
         run: ./run_test.sh
+
+  build:
+    runs-on: ubuntu-latest
+    name: Build Docker Image
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: docker build -t portfolio:ci .
