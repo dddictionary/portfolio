@@ -20,6 +20,7 @@ NAV_ITEMS = [
     {"href": "/#travels", "caption": "travels"},
     {"href": "/#guestbook", "caption": "guestbook"},
     {"href": "/blog", "caption": "blog"},
+    {"href": "/book", "caption": "book"},
 ]
 
 SKILLS = [
@@ -60,6 +61,16 @@ async def index():
 @router.get("/blog", response_class=HTMLResponse)
 async def blog():
     return render("blog.html", title="Abrar Habib — Blog", request_path="/blog", posts=[])
+
+
+@router.get("/book", response_class=HTMLResponse)
+async def book():
+    return render(
+        "book.html",
+        title="Abrar Habib — Book time",
+        request_path="/book",
+        turnstile_site_key=os.environ.get("TURNSTILE_SITE_KEY", ""),
+    )
 
 
 # ── Redirects for old routes ──

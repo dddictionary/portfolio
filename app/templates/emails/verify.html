@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<body style="font-family: sans-serif; max-width: 540px; margin: 0 auto; padding: 24px;">
+  <h2>Confirm your booking request</h2>
+  <p>Hey {{ name }},</p>
+  <p>You requested time on Abrar's calendar — <strong>{{ title }}</strong> on {{ start_local }} ({{ duration_min }} min).</p>
+  <p>Click below to confirm. Abrar will review and reply.</p>
+  <p>
+    <a href="{{ verify_url }}" style="display: inline-block; background: #111; color: #fff; padding: 12px 20px; text-decoration: none; border-radius: 6px;">Confirm request</a>
+  </p>
+  <p style="color: #888; font-size: 12px;">This link expires in 24 hours. If you didn't request this, ignore this email.</p>
+</body>
+</html>

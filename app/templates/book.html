@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% if turnstile_site_key %}
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+{% endif %}
+<style>
+  .book { max-width: 640px; margin: 0 auto; padding: 80px 24px 120px; }
+  .book__title { font-family: Syne, sans-serif; font-size: 2.5rem; margin-bottom: 8px; }
+  .book__note { color: var(--muted, #888); margin-bottom: 32px; font-size: 0.95rem; }
+  .book__form { display: flex; flex-direction: column; gap: 16px; }
+  .book__field { display: flex; flex-direction: column; gap: 6px; }
+  .book__field label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .book__field input, .book__field textarea, .book__field select {
+    padding: 10px 12px; border: 1px solid #444; background: transparent; color: inherit;
+    font-family: inherit; font-size: 1rem; border-radius: 4px;
+  }
+  .book__field textarea { resize: vertical; min-height: 100px; }
+  .book__row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .book__submit {
+    padding: 12px 24px; background: #fff; color: #111; border: none; border-radius: 4px;
+    font-weight: 600; cursor: pointer; font-size: 1rem; margin-top: 8px;
+  }
+  .book__submit:disabled { opacity: 0.5; cursor: not-allowed; }
+  .book__honeypot { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  .book__status { margin-top: 16px; padding: 12px; border-radius: 4px; }
+  .book__status--ok { background: rgba(10, 127, 63, 0.15); color: #4caf7c; }
+  .book__status--err { background: rgba(176, 0, 32, 0.15); color: #ff6b8a; }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="book">
+  <h1 class="book__title">Book time</h1>
+  <p class="book__note">
+    Generally available weekdays after 5pm ET, and weekends anytime.
+    Pick a time that works — I'll confirm via email.
+  </p>
+
+  <form class="book__form" id="bookForm">
+    <div class="book__honeypot" aria-hidden="true">
+      <label>Leave this empty<input type="text" name="honeypot" tabindex="-1" autocomplete="off"></label>
+    </div>
+
+    <div class="book__row">
+      <div class="book__field">
+        <label for="name">Your name</label>
+        <input id="name" name="name" type="text" required maxlength="100">
+      </div>
+      <div class="book__field">
+        <label for="email">Your email</label>
+        <input id="email" name="email" type="email" required maxlength="200">
+      </div>
+    </div>
+
+    <div class="book__field">
+      <label for="title">Subject</label>
+      <input id="title" name="title" type="text" required maxlength="200" placeholder="e.g. catch up, project chat">
+    </div>
+
+    <div class="book__field">
+      <label for="description">What's it about?</label>
+      <textarea id="description" name="description" required maxlength="2000"></textarea>
+    </div>
+
+    <div class="book__row">
+      <div class="book__field">
+        <label for="start_time">Preferred date & time</label>
+        <input id="start_time" name="start_time" type="datetime-local" required>
+      </div>
+      <div class="book__field">
+        <label for="duration_min">Duration</label>
+        <select id="duration_min" name="duration_min" required>
+          <option value="15">15 minutes</option>
+          <option value="30" selected>30 minutes</option>
+          <option value="60">60 minutes</option>
+        </select>
+      </div>
+    </div>
+
+    <input type="hidden" name="timezone" id="timezone">
+
+    {% if turnstile_site_key %}
+    <div class="cf-turnstile" data-sitekey="{{ turnstile_site_key }}"></div>
+    {% endif %}
+
+    <button type="submit" class="book__submit" id="submitBtn">Send request</button>
+    <div id="status"></div>
+  </form>
+</section>
+
+<script>
+  document.getElementById('timezone').value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  const form = document.getElementById('bookForm');
+  const status = document.getElementById('status');
+  const submitBtn = document.getElementById('submitBtn');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    status.className = '';
+    status.textContent = 'Sending...';
+    try {
+      const resp = await fetch('/api/booking', { method: 'POST', body: new FormData(form) });
+      const data = await resp.json().catch(() => ({}));
+      if (resp.ok) {
+        status.className = 'book__status book__status--ok';
+        status.textContent = data.message || 'Request sent — check your email.';
+        form.reset();
+        document.getElementById('timezone').value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      } else {
+        status.className = 'book__status book__status--err';
+        status.textContent = data.detail || 'Something went wrong.';
+        submitBtn.disabled = false;
+      }
+    } catch (err) {
+      status.className = 'book__status book__status--err';
+      status.textContent = 'Network error. Try again.';
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+{% endblock %}
