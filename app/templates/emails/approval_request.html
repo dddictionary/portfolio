@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<body style="font-family: sans-serif; max-width: 540px; margin: 0 auto; padding: 24px;">
+  <h2>New booking request</h2>
+  <table style="font-size: 14px;">
+    <tr><td><strong>Name</strong></td><td>{{ name }}</td></tr>
+    <tr><td><strong>Email</strong></td><td>{{ email }}</td></tr>
+    <tr><td><strong>Title</strong></td><td>{{ title }}</td></tr>
+    <tr><td><strong>When</strong></td><td>{{ start_local }} ({{ duration_min }} min, {{ timezone }})</td></tr>
+    <tr><td><strong>IP</strong></td><td>{{ ip }}</td></tr>
+  </table>
+  <p><strong>Details:</strong></p>
+  <blockquote style="border-left: 3px solid #ccc; padding-left: 12px; color: #444;">{{ description }}</blockquote>
+  <p>
+    <a href="{{ approve_url }}" style="display: inline-block; background: #0a7f3f; color: #fff; padding: 12px 20px; text-decoration: none; border-radius: 6px; margin-right: 8px;">Approve</a>
+    <a href="{{ reject_url }}" style="display: inline-block; background: #b00020; color: #fff; padding: 12px 20px; text-decoration: none; border-radius: 6px;">Reject</a>
+  </p>
+</body>
+</html>

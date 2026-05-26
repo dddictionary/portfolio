@@ -10,6 +10,7 @@ from prometheus_client import Counter, Histogram
 
 from app.database import close_db, init_db
 from app.routes.api import router as api_router
+from app.routes.booking import router as booking_router
 from app.routes.pages import router as pages_router
 
 load_dotenv()
@@ -71,6 +72,7 @@ async def healthz():
 
 
 app.include_router(api_router)
+app.include_router(booking_router)
 app.include_router(pages_router)
 
 static_dir = os.path.join(os.path.dirname(__file__), "static")
